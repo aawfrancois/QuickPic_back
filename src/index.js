@@ -13,4 +13,8 @@ app.get('/', function (req, res) {
     res.send('hello world Express')
 })
 
+app.get('/docs', function (req, res) {
+    res.sendFile('../docs/setup_server_node.html')
+})
+
 app.listen(process.env.PORT, () => console.log(`Example app listening on port ${process.env.PORT}!`))
