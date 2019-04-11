@@ -13,14 +13,4 @@ app.get('/', function (req, res) {
     res.send('hello world')
 })
 
-// response with file
-app.get('/docs', function (req, res) {
-    res.sendFile(path.join(__dirname, '../docs/setup_server_node.html'));
-})
-
-//404 for routes undefined
-app.use((req, res, next) => {
-    res.status(404).send('oops')
-})
-
 app.listen(process.env.PORT, () => console.log(`Example app listening on port ${process.env.PORT}!`))
