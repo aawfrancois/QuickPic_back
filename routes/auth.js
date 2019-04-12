@@ -10,14 +10,15 @@ dotenv.config()
 let api = Router()
 
 api.post('/register', async (req, res) => {
+    console.log('test')
     let {nickname, email, password, password_confirmation} = req.body
 
     try {
         let user = new User({ nickname, email, password, password_confirmation })
         let data = await user.save()
-        res.json({ data })
+        res.json({ data: data })
     } catch (error) {
-        res.json({ error })
+        res.json({ err: error.message })
     }
 })
 
