@@ -1,6 +1,6 @@
 import {Model} from 'sequelize'
 
-export default class Game extends Model {
+export default class UserGame extends Model {
     static init(sequelize, DataTypes) {
         return super.init(
             {
@@ -9,21 +9,15 @@ export default class Game extends Model {
                     autoIncrement: true,
                     primaryKey: true
                 },
-                startGame: {
-                    type: DataTypes.DATE,
-                    allowNull: false
-                },
-                endGame: {
-                    type: DataTypes.DATE,
-                    allowNull: false
-                },
+                score: DataTypes.INTEGER
             },
             {
                 sequelize,
-                tableName: "game",
+                tableName: "game_user",
             },
         )
     }
 
-
 }
+
+

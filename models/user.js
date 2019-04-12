@@ -1,64 +1,122 @@
-import { Model } from "sequelize";
-import bcrypt from 'bcrypt';
+import { Model } from 'sequelize'
+import bcrypt from 'bcrypt'
+
+const MIN_PASSWORD_LENGHT = 7;
 
 export default class User extends Model {
     static init(sequelize, DataTypes) {
-        super.init(
+        return super.init(
             {
-                id: {
-                    type: DataTypes.INTEGER,
-                    autoIncrement: true,
-                    primaryKey: true
-                },
-                username: {
-                    type: DataTypes.STRING,
+                uuid: {
+                    type: DataTypes.UUID,
+                    defaultValue: DataTypes.UUIDV4,
+                    primaryKey: true,
                 },
                 email: {
                     type: DataTypes.STRING,
                     allowNull: false,
                     validate: {
-                        isEmail: true
+                        isEmail: true,
                     },
                     unique: {
                         args: true,
-                        msg: "Email Already Use"
-                    }
+                        msg: "Email adress already in use",
+                    },
+                },
+                nickname: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
+                     unique: {
+                         args: true,
+                         msg: "Nickname already in use",
+                     },
+                },
+                password_digest: {
+                    type: DataTypes.STRING,
+                    allowNull: false,
                 },
                 password: {
-                    type: DataTypes.STRING,
-                    allowNull: false
-                },
-                password_confirm: {
                     type: DataTypes.VIRTUAL,
-                    allowNull: false
+                     validate: {
+                         isLongEnough(val) {
+                             if (val.length < MIN_PASSWORD_LENGHT) {
+                                 throw new Error("Password is too short")
+                             }
+                         },
+                     },
+                },
+                password_confirmation: {
+                    type: DataTypes.VIRTUAL,
+                     validate: {
+                         isEqual(val) {
+                             if (this.password !== val) {
+                                 throw new Error("Passwords don't match")
+                             }
+                         },
+                     },
                 },
                 firstname: {
                     type: DataTypes.STRING,
+                    allowNull: true,
                 },
                 lastname: {
                     type: DataTypes.STRING,
+                    allowNull: true,
                 },
                 birthdate: {
                     type: DataTypes.DATE,
+                    allowNull: true,
                 },
                 points: {
-                    type: DataTypes.INTEGER
-                }
+                    type: DataTypes.INTEGER,
+                    allowNull: true,
+                },
             },
             {
                 sequelize,
+                tableName: "user",
                 hooks: {
-                    beforeCreate: function(User) {
-                        if (User.password !== User.password_confirm) {
-                            throw "error password don't match!"
+                    beforeValidate: async user => {
+                        if(user.isNewRecord) {
+                            user.password_digest = await User.generatePasswordHash(user.password);
                         }
-
-                        let salt = bcrypt.genSaltSync();
-                        User.password = bcrypt.hashSync(User.password, salt)
-                    }
-                }
-            }
+                    },
+                    beforeSave: async user => {
+                        if (user.changed('password')) {
+                           if (user.password !== user.password_confirmation) {
+                               throw new Error("Passwords don't match");
+                           }
+                        }
+                    },
+                },
+            },
         )
     }
-}
 
+
+    async checkPassword(password) {
+        return bcrypt.compare(password, this.password_digest)
+    }
+
+    async generatePasswordHash() {
+        // we choose ~10 hashes/sec
+        const SALT_ROUNDS = 10
+
+        // auto-generate a salt and hash the password
+        const hash = await bcrypt.hash(this.password, SALT_ROUNDS)
+
+        if (!hash) {
+            throw new Error("USER.PASSWORD.HASH_MESSAGE")
+        }
+
+        return hash
+    }
+
+    toJSON() {
+        const obj = Object.assign({}, this.get());
+        delete obj.password_digest;
+        delete obj.password;
+        delete obj.password_confirmation;
+        return obj;
+    }
+}

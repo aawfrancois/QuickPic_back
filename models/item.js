@@ -1,8 +1,8 @@
-import { Model } from "sequelize";
+import {Model} from "sequelize";
 
 export default class Item extends Model {
     static init(sequelize, DataTypes) {
-        super.init(
+        return super.init(
             {
                 id: {
                     type: DataTypes.INTEGER,
@@ -12,8 +12,11 @@ export default class Item extends Model {
                 libelle: {
                     type: DataTypes.STRING,
                 },
-
-            }
+            },
+            {
+                sequelize,
+                tableName: "item",
+            },
         )
     }
 }

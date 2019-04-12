@@ -1,8 +1,8 @@
-import { Model } from "sequelize";
+import {Model} from "sequelize";
 
 export default class Category extends Model {
     static init(sequelize, DataTypes) {
-        super.init(
+        return super.init(
             {
                 id: {
                     type: DataTypes.INTEGER,
@@ -13,7 +13,12 @@ export default class Category extends Model {
                     type: DataTypes.STRING,
                 },
 
-            }
+            },
+            {
+                sequelize,
+                tableName: "category",
+            },
         )
     }
+
 }
