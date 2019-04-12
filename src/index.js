@@ -15,9 +15,6 @@ app.use(bodyParser.urlencoded({ extended: false}))
 
 db.sync({ force: true }).then(() => {
 
-    api.get('/', (req, res) => {
-        res.json({ hi: 'startupWeek API' })
-    })
     app.use('/api', routes)
 
     app.use((req, res, next) => {
