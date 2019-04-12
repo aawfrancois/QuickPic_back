@@ -2,7 +2,7 @@ import { Model } from "sequelize";
 
 export default class Game extends Model {
   static init(sequelize, DataTypes) {
-    super.inti(
+    super.init(
       {
         id: {
           type: DataTypes.INTEGER,
@@ -17,7 +17,7 @@ export default class Game extends Model {
           type: DataTypes.DATE,
           allowNull: false
         },
-        // TODO 
+        // TODO
         // Associate model to other models
       }
     )
