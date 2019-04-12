@@ -78,7 +78,7 @@ export default class User extends Model {
                 hooks: {
                     beforeValidate: async user => {
                         if(user.isNewRecord) {
-                            user.password_digest = await User.generatePasswordHash(user.password);
+                            user.password_digest = await user.generatePasswordHash(user.password);
                         }
                     },
                     beforeSave: async user => {
@@ -100,11 +100,12 @@ export default class User extends Model {
 
     async generatePasswordHash() {
         // we choose ~10 hashes/sec
+
         const SALT_ROUNDS = 10
 
         // auto-generate a salt and hash the password
         const hash = await bcrypt.hash(this.password, SALT_ROUNDS)
-
+console.log(hash);
         if (!hash) {
             throw new Error("USER.PASSWORD.HASH_MESSAGE")
         }

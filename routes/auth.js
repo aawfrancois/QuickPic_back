@@ -10,7 +10,6 @@ dotenv.config()
 let api = Router()
 
 api.post('/register', async (req, res) => {
-    console.log('test')
     let {nickname, email, password, password_confirmation} = req.body
 
     try {
