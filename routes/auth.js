@@ -24,7 +24,7 @@ api.post('/register', async (req, res) => {
 api.post('/login', (req, res) => {
     passport.authenticate('local', { session: false }, (err, user) => {
         if (err) {
-            return res.status(400).json({ err })
+            return res.status(400).json({ err: err.message })
         }
 
         const { id, nickname, email } = user.toJSON()
