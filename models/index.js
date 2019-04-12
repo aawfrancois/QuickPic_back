@@ -21,8 +21,6 @@ Item.init(db, Sequelize);
 UserGame.init(db, Sequelize);
 
 
-//User.belongsToMany(Game, {through: 'game_user', foreignKey: 'user_id'});
-
 User.belongsToMany(Game, { through: UserGame });
 Game.belongsToMany(User, { through: UserGame });
 
