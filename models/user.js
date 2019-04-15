@@ -81,13 +81,6 @@ export default class User extends Model {
                             user.password_digest = await user.generatePasswordHash(user.password);
                         }
                     },
-                    /*beforeSave: async user => {
-                        if (user.changed('password')) {
-                           if (user.password !== user.password_confirmation) {
-                               throw new Error("Passwords don't match");
-                           }
-                        }
-                    },*/
                 },
             },
         )
@@ -105,7 +98,7 @@ export default class User extends Model {
 
         // auto-generate a salt and hash the password
         const hash = await bcrypt.hash(this.password, SALT_ROUNDS)
-console.log(hash);
+
         if (!hash) {
             throw new Error("USER.PASSWORD.HASH_MESSAGE")
         }
@@ -113,7 +106,7 @@ console.log(hash);
         return hash
     }
 
-    toJSON() {
+    toJson() {
         const obj = Object.assign({}, this.get());
         delete obj.password_digest;
         delete obj.password;

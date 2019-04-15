@@ -4,11 +4,12 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import {db} from '../models'
 import passport from 'passport'
+import '../middleware/passport'
 
 import routes from '../routes'
 
 const app = express()
-// Parse incoming request available "req.body"
+
 app.use(bodyParser.json())
 app.use(passport.initialize())
 app.use(bodyParser.urlencoded({ extended: false}))

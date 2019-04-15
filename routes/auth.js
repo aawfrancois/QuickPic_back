@@ -4,6 +4,7 @@ import User from '../models/user'
 import passport from 'passport'
 import jwt from 'jsonwebtoken'
 
+
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -21,18 +22,21 @@ api.post('/register', async (req, res) => {
     }
 })
 
-api.post('/login', (req, res) => {
+api.post('/login', (req, res, next) => {
+
     passport.authenticate('local', { session: false }, (err, user) => {
+        console.log(typeof user);
         if (err) {
+
             return res.status(400).json({ err: err.message })
         }
 
-        const { id, nickname, email } = user.toJSON()
-
-        let token = jwt.sign({ id, nickname, email }, process.env.JWT_ENCRYPTION)
+        const { nickname, uuid, email } = user
+        const payload = { uuid: user.uuid, nickname, email };
+        const token = jwt.sign(payload, process.env.JWT_ENCRYPTION);
 
         res.json({ token, data: { user } })
-    })(req,res)
+    })(req, res, next)
 })
 
 export default api
