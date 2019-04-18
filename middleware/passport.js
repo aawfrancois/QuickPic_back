@@ -9,9 +9,8 @@ dotenv.config()
 
 passport.use(
     new LocalStrategy(
-        { usernameField: "nickname", passwordField: "password" },
+        { username: "nickname", password: "password" },
         async (nickname, password, done) => {
-
             try {
                 const user = await User.findOne({ where: { nickname } });
                 if (!user) {
@@ -50,4 +49,4 @@ passport.use(
             }
         }
     )
-)
+);

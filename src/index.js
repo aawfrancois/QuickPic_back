@@ -14,7 +14,7 @@ app.use(bodyParser.json())
 app.use(passport.initialize())
 app.use(bodyParser.urlencoded({ extended: false}))
 
-db.sync({ force: true }).then(() => {
+db.sync({ force: false }).then(() => {
 
     app.use('/api', routes)
 
