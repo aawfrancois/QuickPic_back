@@ -7,7 +7,6 @@ const api = Router()
 api.get('/scoreboard/:uuid', async (req, res) => {
   try {
     const currentUserID = req.params.uuid
-    
     const users = await User.findAll({
       order: [
         ['points', 'DESC']
@@ -16,12 +15,14 @@ api.get('/scoreboard/:uuid', async (req, res) => {
         'uuid', 'nickname', 'points'
       ]
     })
+
     users.forEach((element, index) => {
-      const {uuid, nickname, points } = element.dataValues
-      element.dataValues.position = index += 1
+      const user = element.dataValues
+      const { uuid } = user
+      user.position = index += 1
 
       if (uuid === currentUserID) {
-        element.dataValues.isCurrentUser = true
+        user.isCurrentUser = true
       }
     })
     res.status(200).send(users)
