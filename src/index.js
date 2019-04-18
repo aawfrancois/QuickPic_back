@@ -18,8 +18,8 @@ db.sync({ force: false }).then(() => {
 
     app.use('/api', routes)
 
-    app.use((req, res, next) => {
-        res.json({ err: "OK" })
+    app.use((err, res, next) => {
+        res.json({ err: err.message })
     })
 
     app.listen(process.env.PORT, err => {
