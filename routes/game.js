@@ -11,12 +11,12 @@ api.get('/', async (req, res) => {
   } catch (error) {
     res.status(400).send({ error: error.message })
   }
-})
+});
 
 // get a game by its id
 api.get('/:game_id', async (req, res) => {
   try {
-    
+
     const game = await Game.findOne({ where: { id: req.params.game_id }})
 
     if (game) {

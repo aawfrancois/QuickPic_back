@@ -17,6 +17,10 @@ export default class Game extends Model {
                     type: DataTypes.DATE,
                     allowNull: false
                 },
+                status: {
+                    type: DataTypes.ENUM('upcoming', 'in progess', 'completed'),
+                    allowNull: false
+                }
             },
             {
                 sequelize,
