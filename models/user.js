@@ -81,6 +81,14 @@ export default class User extends Model {
                             user.password_digest = await user.generatePasswordHash(user.password);
                         }
                     },
+                    beforeSave: async user => {
+                        if (user.changed("password")) {
+                            if (user.password !== user.password_confirmation) {
+                                throw new Error("Passwords don't match");
+                            }
+                            user.password_digest = await user.generatePasswordHash(user.password);
+                        }
+                    }
                 },
             },
         )

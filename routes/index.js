@@ -1,5 +1,7 @@
 import { Router } from 'express'
 import auth from './auth'
+import passport from 'passport'
+import user from "./user";
 import game from './game'
 import user from './user'
 
@@ -9,8 +11,8 @@ api.get('/', (req, res) => {
     res.json({ hi: 'startupWeek API' })
 })
 
+api.use('/users', passport.authenticate('jwt', {session: false}), user);
 api.use('/auth', auth)
 api.use('/games', game)
-api.use('/users', user)
 
 export default api
