@@ -1,7 +1,6 @@
 import { Router } from 'express'
 import auth from './auth'
 import passport from 'passport'
-import user from "./user";
 import game from './game'
 import user from './user'
 
