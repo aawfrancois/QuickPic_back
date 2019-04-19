@@ -11,6 +11,11 @@
   "license": "ISC",
   "devDependencies": {},
   "dependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.4.3",
+    "@sendgrid/mail": "^6.3.1",
     "bcrypt": "^3.0.5",
     "body-parser": "^1.18.3",
     "dotenv": "^7.0.0",
@@ -24,10 +29,7 @@
     "path": "^0.12.7",
     "pg": "^7.9.0",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^5.3.3",
-    "@babel/cli": "^7.4.3",
-    "@babel/core": "^7.4.3",
-    "@babel/node": "^7.2.2",
-    "@babel/preset-env": "^7.4.3"
+    "sendgrid": "^5.2.3",
+    "sequelize": "^5.3.3"
   }
 }
