@@ -107,7 +107,6 @@ api.get("/history/:uuid", async (request, response) => {
         })
 
         if (usergame.length !== 0) {
-
             response.status(200).json(result);
         } else {
             response.status(200).json( { msg: "Vous n'avez pas encore jouer de parties." } );
@@ -125,7 +124,7 @@ api.get('/scoreboard/:uuid', async (req, res) => {
     const currentUserID = req.params.uuid
     const users = await User.findAll({
       order: [
-        ['points', 'DESC']
+        ['points', 'ASC']
       ],
       attributes: [
         'uuid', 'nickname', 'points'

@@ -12,6 +12,6 @@ api.get('/', (req, res) => {
 
 api.use('/users', passport.authenticate('jwt', {session: false}), user);
 api.use('/auth', auth)
-api.use('/games', game)
+api.use('/games',passport.authenticate('jwt', {session: false}), game)
 
 export default api
