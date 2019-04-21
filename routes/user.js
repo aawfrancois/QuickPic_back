@@ -48,12 +48,7 @@ api.put("/profil/:uuid", async (request, response) => {
             "birthdate"
         ]);
         await user.update(field);
-        response.status(204).json({
-            data: {
-                user,
-                meta: {},
-            }
-        });
+        response.status(204).json({ data: user });
     } catch (error) {
         response.status(400).json({
             err: error.message
