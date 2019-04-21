@@ -10,15 +10,15 @@ export default class Game extends Model {
                     primaryKey: true
                 },
                 startGame: {
-                    type: DataTypes.DATE,
+                    type: DataTypes.INTEGER,
                     allowNull: false
                 },
                 endGame: {
-                    type: DataTypes.DATE,
+                    type: DataTypes.INTEGER,
                     allowNull: false
                 },
                 status: {
-                    type: DataTypes.ENUM('upcoming', 'in progess', 'completed'),
+                    type: DataTypes.STRING,
                     allowNull: false
                 }
             },

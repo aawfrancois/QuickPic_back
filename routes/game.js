@@ -3,6 +3,7 @@ import Game from '../models/game'
 import Item from '../models/item'
 import * as _ from "lodash"
 import Category from "../models/category";
+import Usergame from "../models/usergame"
 
 const api = Router()
 
@@ -49,8 +50,25 @@ api.get('/', async (req, res) => {
             obj.itemLibelle = item[index].libelle
             result.push(obj)
         })
+
+        const usergame = await Usergame.findAll();
+
+        let usergameArray  = []
+
+        usergame.forEach(element => {
+            usergameArray.push(element.dataValues.GameId)
+        });
+
+        let res = []
+
+        result.forEach(element => {
+            if(!(usergameArray.includes(element.idGame))) {
+                res.push(element)
+            }
+        });
+
         if (game.length !== 0) {
-            res.status(200).json(result);
+            res.status(200).json(res);
         } else {
             res.status(200).json({msg: "Aucune parties n'est présente"});
         }
@@ -79,6 +97,33 @@ api.get('/:game_id', async (req, res) => {
         } else {
             res.status(404).json("Oops, the game you want doesn't exist.")
         }
+    } catch (error) {
+        res.status(400).send({error: error.message})
+    }
+})
+
+
+api.post('/:game_id', async (req, res) => {
+
+    let {pourcentage, uuid} = req.body
+
+    try {
+        const user = await Game.findOne({where: {id: uuid}})
+
+
+        // let obj = {
+        //     id: game.id,
+        //     startGame: game.startGame,
+        //     endtGame: game.endGame,
+        //     status: game.status,
+        //     itemLibelle: item.libelle
+        // }
+        //
+        // if (game) {
+        //     res.status(200).json(obj)
+        // } else {
+        //     res.status(404).json("Oops, the game you want doesn't exist.")
+        // }
     } catch (error) {
         res.status(400).send({error: error.message})
     }
