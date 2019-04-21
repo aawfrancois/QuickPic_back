@@ -8,7 +8,7 @@ import Usergame from "../models/usergame"
 const api = Router()
 
 // get all games
-api.get('/', async (req, res) => {
+api.get('/', async (request, response) => {
     try {
         const game = await Game.findAll({where: {status: ['upcoming', 'in progress']}})
 
@@ -26,11 +26,15 @@ api.get('/', async (req, res) => {
             idCategory.push(elementCategory.dataValues.id_category)
         })
 
+
         let category = await Category.findAll({where: {id: idCategory}});
 
         game.forEach((element, index) => {
-            if (element.dataValues.id_item == item[index].id && item.length < game.length)
-                item.push(item[index])
+            if (!item[index] === undefined){
+                if (element.dataValues.id_item == item[index].id && item.length < game.length)
+                    item.push(item[index])
+            }
+
         })
 
         item.forEach((element, index) => {
@@ -68,12 +72,12 @@ api.get('/', async (req, res) => {
         });
 
         if (game.length !== 0) {
-            res.status(200).json(res);
+            response.status(200).json(res);
         } else {
-            res.status(200).json({msg: "Aucune parties n'est présente"});
+            response.status(200).json({msg: "Aucune parties n'est présente"});
         }
     } catch (error) {
-        res.status(400).send({error: error.message})
+        response.status(400).send({error: error.message})
     }
 });
 
