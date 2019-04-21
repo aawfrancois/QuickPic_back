@@ -10,7 +10,7 @@ const api = Router()
 // get all games
 api.get('/', async (req, res) => {
     try {
-        const game = await Game.findAll({where: {status: ['upcoming', 'in progess']}})
+        const game = await Game.findAll({where: {status: ['upcoming', 'in progress']}})
 
         let idItems = []
 
