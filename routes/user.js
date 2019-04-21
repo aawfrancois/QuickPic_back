@@ -11,9 +11,8 @@ dotenv.config();
 
 let api = Router();
 
-api.get("/:uuid/profil", async (request, response) => {
+api.get("/profil/:uuid", async (request, response) => {
     try {
-        console.log('test')
         const uuid = request.params.uuid;
         const user = await User.findOne({ where: { uuid } });
         if (user) {
