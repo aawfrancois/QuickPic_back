@@ -112,7 +112,7 @@ api.post('/:game_id', async (req, res) => {
     let {pourcentage, uuid, time} = req.body
 
     try {
-        const user = await Game.findOne({where: {id: uuid}})
+        const user = await User.findOne({where: {id: uuid}})
 
         const usergame = await Usergame.findOne({where: {id: req.params.game_id}})
 
