@@ -1,6 +1,7 @@
 import {Router} from 'express'
 import Game from '../models/game'
 import Item from '../models/item'
+import User from '../models/user'
 import * as _ from "lodash"
 import Category from "../models/category";
 import Usergame from "../models/usergame"
