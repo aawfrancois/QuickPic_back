@@ -31,7 +31,7 @@ api.get('/', async (request, response) => {
         let category = await Category.findAll({where: {id: idCategory}});
 
         game.forEach((element, index) => {
-            if (!item[index] === undefined){
+            if (!item[index] === undefined) {
                 if (element.dataValues.id_item == item[index].id && item.length < game.length)
                     item.push(item[index])
             }
@@ -58,7 +58,7 @@ api.get('/', async (request, response) => {
 
         const usergame = await Usergame.findAll();
 
-        let usergameArray  = []
+        let usergameArray = []
 
         usergame.forEach(element => {
             usergameArray.push(element.dataValues.GameId)
@@ -67,7 +67,7 @@ api.get('/', async (request, response) => {
         let res = []
 
         result.forEach(element => {
-            if(!(usergameArray.includes(element.idGame))) {
+            if (!(usergameArray.includes(element.idGame))) {
                 res.push(element)
             }
         });
@@ -113,21 +113,24 @@ api.post('/:game_id', async (req, res) => {
     let {pourcentage, uuid, time} = req.body
 
     try {
-        const user = await User.findOne({where: { uuid: uuid }})
+        const user = await User.findOne({where: {uuid: uuid}})
 
-        const usergame = await Usergame.findOne({ where: {id: req.params.game_id }})
+        let calcul = parseInt(pourcentage) + parseInt(time);
 
-        let calcul = pourcentage + time;
+        if (user.dataValues.points == null) {
+            user.dataValues.points = 0;
+        }
+        let calculUser = calcul + parseInt(user.dataValues.points)
 
-        let calculUser = calcul + user.score
+        user.update({
+            points: parseInt(calculUser)
+        }).then(() => {
+        })
 
-        Usergame.sequelize.query(`INSERT INTO game_user (score, user_uuid, game_id) values (${calcul}, ${uuid}, ${req.params.game_id})`)
-
-        User.sequelize.query(`UPDATE user SET points = ${calculUser} WHERE uuid = ${uuid}`)
-
+        Usergame.sequelize.query(`INSERT INTO game_user (score, user_uuid, game_id) values (${parseInt(calcul)}, '${uuid}', ${req.params.game_id})`)
 
         if (user) {
-            res.status(200).json({ calcul: calcul })
+            res.status(200).json({calcul: calcul})
         } else {
             res.status(404).json("Oops, the game you want doesn't exist.")
         }

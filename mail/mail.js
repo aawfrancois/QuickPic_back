@@ -7,9 +7,8 @@ export function newUserEmail(email, name) {
     SGmail.setApiKey(process.env.SENDGRID_API_KEY)
     const message = {
         to: email,
-        from: 'antoinefrancois95@gmail.com',
+        from: 'quickpicapi@gmail.com',
         message: `Hi there, ${name}`,
-        subject: "Welcome QuickPic Mail",
         template_id: "d-64b8dd107e4d45ca98e4365859870922",
         dynamic_template_data: {
             subject: 'Testing Templates',
