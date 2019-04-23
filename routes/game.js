@@ -109,25 +109,27 @@ api.get('/:game_id', async (req, res) => {
 
 api.post('/:game_id', async (req, res) => {
 
-    let {pourcentage, uuid} = req.body
+    let {pourcentage, uuid, time} = req.body
 
     try {
         const user = await Game.findOne({where: {id: uuid}})
 
+        const usergame = await Usergame.findOne({where: {id: req.params.game_id}})
 
-        // let obj = {
-        //     id: game.id,
-        //     startGame: game.startGame,
-        //     endtGame: game.endGame,
-        //     status: game.status,
-        //     itemLibelle: item.libelle
-        // }
-        //
-        // if (game) {
-        //     res.status(200).json(obj)
-        // } else {
-        //     res.status(404).json("Oops, the game you want doesn't exist.")
-        // }
+        let calcul = pourcentage + time;
+
+        let calculUser = calcul + user.score
+
+        Usergame.sequelize.query(`INSERT INTO game_user (score, user_uuid, game_id) values (${calcul}, ${uuid}, ${req.params.game_id})`)
+
+        User.sequelize.query(`UPDATE user SET points = ${calculUser} WHERE uuid = ${uuid}`)
+
+
+        if (user) {
+            res.status(200).json({ calcul: calcul })
+        } else {
+            res.status(404).json("Oops, the game you want doesn't exist.")
+        }
     } catch (error) {
         res.status(400).send({error: error.message})
     }
