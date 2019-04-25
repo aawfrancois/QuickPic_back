@@ -41,9 +41,9 @@ export async function createGame() {
             itemIdArray.push(element.dataValues.id)
         })
 
-        let start_game = moment(new Date()).add('120', 'minutes').unix();
+        let start_game = moment(moment()).add('120', 'minutes').unix();
 
-        let end_game = moment(new Date()).add('180', 'minutes').unix();
+        let end_game = moment(moment()).add('180', 'minutes').unix();
 
         let randomItem = itemIdArray[Math.floor(Math.random() * itemIdArray.length)];
 
