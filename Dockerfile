@@ -21,10 +21,11 @@ ARG CIRCLE_SHA1
 # STEPS
 #
 
-WORKDIR /now
+WORKDIR /usr/src/app
 
-# copy the full directory
-ADD . ./
+COPY package*.json ./
+
+COPY . .
 
 #
 # NODE

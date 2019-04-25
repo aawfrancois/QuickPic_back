@@ -5,13 +5,17 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --exec babel-node src/index.js",
-    "worker": "nodemon --exec babel-node src/createdGame.js"
+    "worker": "nodemon --exec babel-node src/createdGame.js",
+    "test": "ls"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/types": "^7.4.0"
+    "@babel/types": "^7.4.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
+    "mocha": "^6.1.4"
   },
   "dependencies": {
     "@babel/cli": "^7.4.3",
