@@ -87,9 +87,10 @@ api.get("/history/:uuid", async (request, response) => {
         let category = await Category.findAll({ where: { id:idCategory } });
 
         game.forEach((element, index) => {
-            if (!item[index] === undefined) {
-                if (element.dataValues.id_item == item[index].id && item.length < game.length)
-                    item.push(item[index])
+            for(let i = 0; i<item.length ; i++){
+                if (element.dataValues.id_item == item[i].id && item.length < game.length){
+                    item.push(item[i])
+                }
             }
         })
 

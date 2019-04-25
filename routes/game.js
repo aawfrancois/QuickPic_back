@@ -31,9 +31,10 @@ api.get('/', async (request, response) => {
         let category = await Category.findAll({where: {id: idCategory}});
 
         game.forEach((element, index) => {
-            if (!item[index] === undefined) {
-                if (element.dataValues.id_item == item[index].id && item.length < game.length)
-                    item.push(item[index])
+            for(let i = 0; i<item.length ; i++){
+                if (element.dataValues.id_item == item[i].id && item.length < game.length){
+                    item.push(item[i])
+                }
             }
         })
 
@@ -119,7 +120,7 @@ api.post('/:game_id', async (req, res) => {
         if (user.dataValues.points == null) {
             user.dataValues.points = 0;
         }
-        let calculUser = calcul + parseInt(user.dataValues.points)
+        let calculUser = calcul * parseInt(user.dataValues.points)
 
         user.update({
             points: parseInt(calculUser)
