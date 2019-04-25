@@ -16,6 +16,7 @@ api.get("/profil/:uuid", async (request, response) => {
         const uuid = request.params.uuid;
         const user = await User.findOne({ where: { uuid } });
         if (user) {
+            console.log(`[PaperTrail][User] User ${uuid} profil find`);
             response.status(200).json({
                 data: {
                     user,
@@ -48,7 +49,7 @@ api.put("/profil/:uuid", async (request, response) => {
             "birthdate"
         ]);
         await user.update(field);
-        // response.status(204).json({ data: user });
+        console.log(`[PaperTrail][User] User ${uuid} update`);
         response.status(204).json({ true : "update ok" });
     } catch (error) {
         response.status(400).json({
@@ -110,8 +111,10 @@ api.get("/history/:uuid", async (request, response) => {
         })
 
         if (usergame.length !== 0) {
+            console.log(`[PaperTrail][User] User ${uuid} history game find`);
             response.status(200).json(result);
         } else {
+            console.log(`[PaperTrail][User] User ${uuid} games not found`);
             response.status(200).json( { msg: "Vous n'avez pas encore jouer de parties." } );
         }
     } catch (error) {

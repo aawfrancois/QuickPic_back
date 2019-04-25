@@ -73,6 +73,7 @@ api.get('/', async (request, response) => {
         });
 
         if (game.length !== 0) {
+            console.log(`[PaperTrail][Game] Games found`);
             response.status(200).json(res);
         } else {
             response.status(200).json({msg: "Aucune parties n'est présente"});
@@ -98,8 +99,10 @@ api.get('/:game_id', async (req, res) => {
         }
 
         if (game) {
+            console.log(`[PaperTrail][Game] Game ${req.params.game_id} found`);
             res.status(200).json(obj)
         } else {
+            console.log(`[PaperTrail][Game] Game ${req.params.game_id} not found`);
             res.status(404).json("Oops, the game you want doesn't exist.")
         }
     } catch (error) {
@@ -130,8 +133,10 @@ api.post('/:game_id', async (req, res) => {
         Usergame.sequelize.query(`INSERT INTO game_user (score, user_uuid, game_id) values (${parseInt(calcul)}, '${uuid}', ${req.params.game_id})`)
 
         if (user) {
+            console.log(`[PaperTrail][Game][User] Game data score send --> User: ${uuid} `);
             res.status(200).json({calcul: calcul})
         } else {
+            console.log(`[PaperTrail][Game][User] Bad id for this route`);
             res.status(404).json("Oops, the game you want doesn't exist.")
         }
     } catch (error) {

@@ -19,8 +19,10 @@ api.post('/register', async (req, res) => {
         let user = new User({ nickname, email, password, password_confirmation })
         let data = await user.save()
         newUserEmail(email, nickname)
+        console.log(`[PaperTrail][Auth][User] User save`);
         res.json({data: data})
     } catch (error) {
+        console.log(`[PaperTrail][Auth][User] ${error.message}`);
         res.json({err: error.message})
     }
 })
@@ -38,6 +40,7 @@ api.post('/login', (req, res, next) => {
             const payload = {uuid: user.uuid, nickname, email};
             const token = jwt.sign(payload, process.env.JWT_ENCRYPTION);
 
+            console.log(`[PaperTrail][Auth][User] User connected`);
             res.json({token, data: {user}})
         })(req, res, next)
     } catch (error) {
