@@ -3,7 +3,7 @@ import Game from '../models/game'
 import Item from '../models/item'
 import User from '../models/user'
 import * as _ from "lodash"
-import Category from "../models/category";
+import Category from "../models/category"
 import Usergame from "../models/usergame"
 
 const api = Router()
@@ -115,12 +115,12 @@ api.post('/:game_id', async (req, res) => {
     try {
         const user = await User.findOne({where: {uuid: uuid}})
 
-        let calcul = parseInt(pourcentage) + parseInt(time);
+        let calcul = parseInt(pourcentage) * parseInt(time);
 
         if (user.dataValues.points == null) {
             user.dataValues.points = 0;
         }
-        let calculUser = calcul * parseInt(user.dataValues.points)
+        let calculUser = calcul + parseInt(user.dataValues.points)
 
         user.update({
             points: parseInt(calculUser)
