@@ -27,7 +27,6 @@ api.get('/', async (request, response) => {
             idCategory.push(elementCategory.dataValues.id_category)
         })
 
-
         let category = await Category.findAll({where: {id: idCategory}});
 
         game.forEach((element, index) => {

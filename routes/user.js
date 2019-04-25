@@ -167,7 +167,10 @@ api.get('/scoreboard/:uuid', async (req, res) => {
             ]
         })
 
-        users.forEach((element, index) => {
+         let usersSort = users.sort(function(a, b) {
+            return a.points - b.points;
+        });
+        usersSort.forEach((element, index) => {
             const user = element.dataValues
             const {uuid} = user
             user.position = index += 1
@@ -176,7 +179,7 @@ api.get('/scoreboard/:uuid', async (req, res) => {
                 user.isCurrentUser = true
             }
         })
-        res.status(200).send(users)
+        res.status(200).send(usersSort)
     } catch (error) {
         res.status(400).send({error: error.message})
     }
