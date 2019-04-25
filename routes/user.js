@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import {Router} from 'express';
 import User from '../models/user';
 import UserGame from '../models/usergame'
 import Item from '../models/item'
@@ -7,6 +7,7 @@ import _ from "lodash";
 
 import dotenv from 'dotenv';
 import Game from "../models/game";
+
 dotenv.config();
 
 let api = Router();
@@ -14,7 +15,7 @@ let api = Router();
 api.get("/profil/:uuid", async (request, response) => {
     try {
         const uuid = request.params.uuid;
-        const user = await User.findOne({ where: { uuid } });
+        const user = await User.findOne({where: {uuid}});
         if (user) {
             console.log(`[PaperTrail][User] User ${uuid} profil find`);
             response.status(200).json({
@@ -30,6 +31,16 @@ api.get("/profil/:uuid", async (request, response) => {
         response.status(400).json({
             err: error.message
         });
+    }
+});
+
+api.delete('/:uuid', async (req, res) => {
+    try {
+        let user = await User.destroy({where: {uuid: req.params.uuid}});
+
+        res.status(200).json({succes: `${user} deleted`});
+    } catch (e) {
+        res.status(400);
     }
 });
 
@@ -56,7 +67,7 @@ api.get("/", async (request, response) => {
 api.put("/profil/:uuid", async (request, response) => {
     try {
         const uuid = request.params.uuid;
-        const user = await User.findOne({ where: { uuid } });
+        const user = await User.findOne({where: {uuid}});
         if (!user) {
             response.status(404).send();
             return;
@@ -70,7 +81,7 @@ api.put("/profil/:uuid", async (request, response) => {
         ]);
         await user.update(field);
         console.log(`[PaperTrail][User] User ${uuid} update`);
-        response.status(204).json({ true : "update ok" });
+        response.status(204).json({true: "update ok"});
     } catch (error) {
         response.status(400).json({
             err: error.message
@@ -82,14 +93,14 @@ api.get("/history/:uuid", async (request, response) => {
     try {
 
         const uuid = request.params.uuid;
-        const usergame = await UserGame.findAll({ where: { user_uuid:uuid } });
+        const usergame = await UserGame.findAll({where: {user_uuid: uuid}});
 
         let idGames = []
 
         usergame.forEach((elementUsergame) => {
             idGames.push(elementUsergame.dataValues.GameId)
         })
-        let game = await Game.findAll({ where: { id:idGames } });
+        let game = await Game.findAll({where: {id: idGames}});
 
         let idItems = []
 
@@ -97,7 +108,7 @@ api.get("/history/:uuid", async (request, response) => {
             idItems.push(elementGame.dataValues.id_item)
         })
 
-        let item = await Item.findAll({ where: { id:idItems } });
+        let item = await Item.findAll({where: {id: idItems}});
 
         let idCategory = []
 
@@ -105,18 +116,18 @@ api.get("/history/:uuid", async (request, response) => {
             idCategory.push(elementCategory.dataValues.id_category)
         })
 
-        let category = await Category.findAll({ where: { id:idCategory } });
+        let category = await Category.findAll({where: {id: idCategory}});
 
         game.forEach((element, index) => {
-            for(let i = 0; i<item.length ; i++){
-                if (element.dataValues.id_item == item[i].id && item.length < game.length){
+            for (let i = 0; i < item.length; i++) {
+                if (element.dataValues.id_item == item[i].id && item.length < game.length) {
                     item.push(item[i])
                 }
             }
         })
 
         item.forEach((element, index) => {
-            if(element.dataValues.id_category == category[index].id && category.length < item.length)
+            if (element.dataValues.id_category == category[index].id && category.length < item.length)
                 category.push(category[index])
         })
 
@@ -135,7 +146,7 @@ api.get("/history/:uuid", async (request, response) => {
             response.status(200).json(result);
         } else {
             console.log(`[PaperTrail][User] User ${uuid} games not found`);
-            response.status(200).json( { msg: "Vous n'avez pas encore jouer de parties." } );
+            response.status(200).json({msg: "Vous n'avez pas encore jouer de parties."});
         }
     } catch (error) {
         response.status(400).json({
@@ -146,30 +157,30 @@ api.get("/history/:uuid", async (request, response) => {
 
 // users ranking
 api.get('/scoreboard/:uuid', async (req, res) => {
-  try {
-    const currentUserID = req.params.uuid
-    const users = await User.findAll({
-      order: [
-        ['points', 'ASC']
-      ],
-      attributes: [
-        'uuid', 'nickname', 'points'
-      ]
-    })
+    try {
+        const currentUserID = req.params.uuid
+        const users = await User.findAll({
+            order: [
+                ['points', 'ASC']
+            ],
+            attributes: [
+                'uuid', 'nickname', 'points'
+            ]
+        })
 
-    users.forEach((element, index) => {
-      const user = element.dataValues
-      const { uuid } = user
-      user.position = index += 1
+        users.forEach((element, index) => {
+            const user = element.dataValues
+            const {uuid} = user
+            user.position = index += 1
 
-      if (uuid === currentUserID) {
-        user.isCurrentUser = true
-      }
-    })
-    res.status(200).send(users)
-  } catch (error) {
-    res.status(400).send({error: error.message})
-  }
+            if (uuid === currentUserID) {
+                user.isCurrentUser = true
+            }
+        })
+        res.status(200).send(users)
+    } catch (error) {
+        res.status(400).send({error: error.message})
+    }
 })
 
 export default api
