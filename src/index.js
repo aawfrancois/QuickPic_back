@@ -29,7 +29,8 @@ db.sync({ force: false }).then(() => {
         console.log(`Server is running at port ${process.env.PORT}`);
     })
 })
-
+//
+// module.exports = app;
 
 
 
