@@ -168,7 +168,7 @@ api.get('/scoreboard/:uuid', async (req, res) => {
         })
 
          let usersSort = users.sort(function(a, b) {
-            return a.points - b.points;
+            return b.points - a.points;
         });
         usersSort.forEach((element, index) => {
             const user = element.dataValues
