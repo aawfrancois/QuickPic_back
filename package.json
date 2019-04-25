@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon --exec babel-node src/index.js",
     "test": "mocha --require ./node_modules/@babel/register",
-    "worker": "nodemon --exec babel-node src/createdGame.js",
+    "worker": "nodemon --exec babel-node src/createdGame.js"
   },
   "keywords": [],
   "author": "",
