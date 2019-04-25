@@ -1,4 +1,3 @@
-import { expect } from "chai"
 const server = require('../src/index');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
