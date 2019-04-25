@@ -12,7 +12,7 @@ describe("Students", () => {
         it("should not get a single student record", (done) => {
             const id = 5;
             chai.request(server)
-                .get(`/${id}`)
+                .get(`/api/users/${id}`)
                 .end((err, res) => {
                     res.should.have.status(404);
                     done();
