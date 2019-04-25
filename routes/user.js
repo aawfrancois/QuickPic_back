@@ -33,6 +33,26 @@ api.get("/profil/:uuid", async (request, response) => {
     }
 });
 
+api.get("/", async (request, response) => {
+    try {
+        let user = await User.findAll()
+        if (user) {
+            response.status(200).json({
+                data: {
+                    user,
+                    meta: {},
+                }
+            });
+        } else {
+            response.status(404).send();
+        }
+    } catch (error) {
+        response.status(400).json({
+            err: error.message
+        });
+    }
+});
+
 api.put("/profil/:uuid", async (request, response) => {
     try {
         const uuid = request.params.uuid;

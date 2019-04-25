@@ -5,26 +5,26 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --exec babel-node src/index.js",
+    "test": "mocha --require ./node_modules/@babel/register",
     "worker": "nodemon --exec babel-node src/createdGame.js",
-    "test": "ls"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/types": "^7.4.0",
-    "chai": "^4.2.0",
-    "chai-http": "^4.2.1",
-    "mocha": "^6.1.4"
+    "@babel/types": "^7.4.0"
   },
   "dependencies": {
     "@babel/cli": "^7.4.3",
     "@babel/core": "^7.4.3",
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.4.3",
+    "@babel/register": "^7.4.0",
     "@sendgrid/mail": "^6.3.1",
     "bcrypt": "^3.0.5",
     "body-parser": "^1.18.3",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.5.1",
