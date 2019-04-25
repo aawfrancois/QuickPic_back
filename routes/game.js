@@ -35,7 +35,6 @@ api.get('/', async (request, response) => {
                 if (element.dataValues.id_item == item[index].id && item.length < game.length)
                     item.push(item[index])
             }
-
         })
 
         item.forEach((element, index) => {
