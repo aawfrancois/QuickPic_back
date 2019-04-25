@@ -37,7 +37,7 @@ api.get("/profil/:uuid", async (request, response) => {
 api.delete('/:uuid', async (req, res) => {
     try {
         let user = await User.destroy({where: {uuid: req.params.uuid}});
-
+        console.log(`[PaperTrail][User] Deleted user: ${user} `);
         res.status(200).json({succes: `${user} deleted`});
     } catch (e) {
         res.status(400);
