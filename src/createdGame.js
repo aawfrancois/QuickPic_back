@@ -65,7 +65,9 @@ export async function changeStatus() {
             if (moment.unix(element.dataValues.startGame).format('YYYY-MM-DD hh:mm:ss') <= CurrentDate && moment.unix(element.dataValues.endGame).format('YYYY-MM-DD hh:mm:ss') >= CurrentDate) {
                 Game.sequelize.query(`UPDATE game SET status = 'in progress' WHERE id = ${element.dataValues.id}`)
             } else if (moment.unix(element.dataValues.endGame).format('YYYY-MM-DD hh:mm:ss') <= CurrentDate) {
-                Game.sequelize.query(`UPDATE game SET status = 'completed' WHERE id = ${element.dataValues.id}`)
+                if (element.dataValues.status === "in progress"){
+                    Game.sequelize.query(`UPDATE game SET status = 'completed' WHERE id = ${element.dataValues.id}`)
+                }
             }
         })
     } catch (e) {
