@@ -93,12 +93,13 @@ api.get("/history/:uuid", async (request, response) => {
     try {
         const uuid = request.params.uuid;
 
-        let history = await UserGame.sequelize.query(`SELECT item.libelle as itemLibelle, category.libelle as categoryLibelle 
+        let history = await UserGame.sequelize.query(`SELECT game_user.score, item.libelle as itemLibelle, category.libelle as categoryLibelle 
                                                             FROM game_user 
                                                             INNER JOIN game ON game_id = game.id 
                                                             INNER JOIN item ON game.id_item = item.id 
                                                             INNER JOIN category ON item.id_category = category.id 
                                                             WHERE game_user.user_uuid = '${uuid}'`)
+        console.log(history);
 
         if (history[1].rowCount !== 0) {
             console.log(`[PaperTrail][User] User ${uuid} history game find`);
