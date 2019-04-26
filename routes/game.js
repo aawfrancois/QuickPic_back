@@ -9,75 +9,48 @@ import Usergame from "../models/usergame"
 const api = Router()
 
 // get all games
-api.get('/', async (request, response) => {
+api.get('/:uuid', async (req, res) => {
     try {
-        const game = await Game.findAll({where: {status: ['upcoming', 'in progress']}})
+        const usergame = await Usergame.findAll({where: {user_uuid: req.params.uuid}})
 
-        let idItems = []
+        let userGameId  = []
 
-        game.forEach((elementGame) => {
-            idItems.push(elementGame.dataValues.id_item)
+        usergame.forEach((element) => {
+            userGameId.push(element.dataValues.id);
         })
 
-        let item = await Item.findAll({where: {id: idItems}});
-
-        let idCategory = []
-
-        item.forEach((elementCategory) => {
-            idCategory.push(elementCategory.dataValues.id_category)
-        })
-
-        let category = await Category.findAll({where: {id: idCategory}});
-
-        game.forEach((element, index) => {
-            if (!item[index] === undefined) {
-                if (element.dataValues.id_item == item[index].id && item.length < game.length)
-                    item.push(item[index])
-            }
-        })
-
-        item.forEach((element, index) => {
-            if (element.dataValues.id_category == category[index].id && category.length < item.length)
-                category.push(category[index])
-        })
-
-        let result = []
-
-        category.forEach((element, index) => {
-            let obj = {}
-            obj.idGame = game[index].id
-            obj.startGame = game[index].startGame
-            obj.endGame = game[index].endGame
-            obj.status = game[index].status
-            obj.categoryLibelle = category[index].libelle
-            obj.itemLibelle = item[index].libelle
-            result.push(obj)
-        })
-
-        const usergame = await Usergame.findAll();
-
-        let usergameArray = []
-
-        usergame.forEach(element => {
-            usergameArray.push(element.dataValues.GameId)
-        });
+        let game = await Game.findAll({where: {status: [ 'upcoming', 'in progress']}});
+        let category = await Category.findAll();
+        let item = await Item.findAll();
 
         let res = []
+        game.forEach(el => {
+            let obj = {}
+            obj.idGame = el.dataValues.id
+            obj.startGame = el.dataValues.startGame
+            obj.endGame = el.dataValues.endGame
+            obj.status = el.dataValues.status
+            let goodItem = item.filter(  data => data.dataValues.id === el.dataValues.id_item)
+            obj.itemLibelle = goodItem[0].libelle
 
-        result.forEach(element => {
-            if (!(usergameArray.includes(element.idGame))) {
-                res.push(element)
+            let goodCat = category.filter(  data=> data.dataValues.id === goodItem[0].id_category)
+            obj.categoryLibelle = goodCat[0].libelle
+
+            if (!userGameId.includes(obj.idGame)){
+                res.push(obj)
             }
         });
 
-        if (game.length !== 0) {
+        console.log(res)
+
+        if (res.length !== 0) {
             console.log(`[PaperTrail][Game] Games found`);
-            response.status(200).json(res);
+            res.status(200).json(res);
         } else {
-            response.status(200).json({msg: "Aucune parties n'est présente"});
+            res.status(200).json({msg: "Aucune parties n'est présente"});
         }
     } catch (error) {
-        response.status(400).send({error: error.message})
+        res.status(400).send({error: error.message})
     }
 });
 

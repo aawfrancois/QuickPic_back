@@ -91,58 +91,18 @@ api.put("/profil/:uuid", async (request, response) => {
 
 api.get("/history/:uuid", async (request, response) => {
     try {
-
         const uuid = request.params.uuid;
-        const usergame = await UserGame.findAll({where: {user_uuid: uuid}});
 
-        let idGames = []
+        let history = await UserGame.sequelize.query(`SELECT item.libelle as itemLibelle, category.libelle as categoryLibelle 
+                                                            FROM game_user 
+                                                            INNER JOIN game ON game_id = game.id 
+                                                            INNER JOIN item ON game.id_item = item.id 
+                                                            INNER JOIN category ON item.id_category = category.id 
+                                                            WHERE game_user.user_uuid = '${uuid}'`)
 
-        usergame.forEach((elementUsergame) => {
-            idGames.push(elementUsergame.dataValues.GameId)
-        })
-        let game = await Game.findAll({where: {id: idGames}});
-
-        let idItems = []
-
-        game.forEach((elementGame) => {
-            idItems.push(elementGame.dataValues.id_item)
-        })
-
-        let item = await Item.findAll({where: {id: idItems}});
-
-        let idCategory = []
-
-        item.forEach((elementCategory) => {
-            idCategory.push(elementCategory.dataValues.id_category)
-        })
-
-        let category = await Category.findAll({where: {id: idCategory}});
-
-        game.forEach((element, index) => {
-            if (!item[index] === undefined) {
-                if (element.dataValues.id_item == item[index].id && item.length < game.length)
-                    item.push(item[index])
-            }
-        })
-
-        item.forEach((element, index) => {
-            if (element.dataValues.id_category == category[index].id && category.length < item.length)
-                category.push(category[index])
-        })
-
-        let result = []
-
-        category.forEach((element, index) => {
-            let obj = {}
-            obj.score = usergame[index].score
-            obj.categoryLibelle = category[index].libelle
-            obj.itemLibelle = item[index].libelle
-            result.push(obj)
-        })
-
-        if (usergame.length !== 0) {
+        if (history[1].rowCount !== 0) {
             console.log(`[PaperTrail][User] User ${uuid} history game find`);
-            response.status(200).json(result);
+            response.status(200).json(history);
         } else {
             console.log(`[PaperTrail][User] User ${uuid} games not found`);
             response.status(200).json({msg: "Vous n'avez pas encore jouer de parties."});
