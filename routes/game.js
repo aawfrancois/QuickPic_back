@@ -23,7 +23,7 @@ api.get('/:uuid', async (req, res) => {
         let category = await Category.findAll();
         let item = await Item.findAll();
 
-        let res = []
+        let result = []
         game.forEach(el => {
             let obj = {}
             obj.idGame = el.dataValues.id
@@ -37,15 +37,15 @@ api.get('/:uuid', async (req, res) => {
             obj.categoryLibelle = goodCat[0].libelle
 
             if (!userGameId.includes(obj.idGame)){
-                res.push(obj)
+                result.push(obj)
             }
         });
 
-        console.log(res)
+        console.log(result)
 
-        if (res.length !== 0) {
+        if (result.length !== 0) {
             console.log(`[PaperTrail][Game] Games found`);
-            res.status(200).json(res);
+            res.status(200).json(result);
         } else {
             res.status(200).json({msg: "Aucune parties n'est présente"});
         }
