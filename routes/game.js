@@ -41,7 +41,7 @@ api.get('/:uuid', async (req, res) => {
             }
         });
 
-        console.log(result)
+        console.log(result);
 
         if (result.length !== 0) {
             console.log(`[PaperTrail][Game] Games found`);
